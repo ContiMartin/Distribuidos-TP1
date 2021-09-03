@@ -21,6 +21,8 @@ while True:
         print(acumulador)
         print('-----------------')
 
+        print(client_address)
+        
         data = connection.recv_into(payload)
 
         if not data: break

@@ -1,10 +1,4 @@
 from client import Client
-
-
-# Para el p 3a
-#from p3a import ClientStub
-
-# Para el p 3b
 from p3b import ClientStub
 
 from datetime import datetime

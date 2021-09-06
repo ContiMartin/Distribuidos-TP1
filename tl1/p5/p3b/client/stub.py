@@ -1,4 +1,4 @@
-import sockets
+import socket
 
 from p3b.structures import (
     Path, 

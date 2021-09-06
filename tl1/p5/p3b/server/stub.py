@@ -1,13 +1,17 @@
 import socket
-from structures import Path
 import pickle
+
+# Libreria hilos
+import threading
+
 
 # Constante para el tamaño del buffer
 cant_buff = 1024
 
-class FSStub:
+class FSStub(threading.Thread):
 
     def __init__(self, canal, file_system_adapter):
+        threading.Thread.__init__(self)
         self._channel = canal
         self._adapter = file_system_adapter
         self._process_request()
@@ -52,6 +56,10 @@ class Stub:
                 connection, client_address = server.accept()
                 from_client = ''
                 self._stub = FSStub(connection, self._adapter)
+                thread = FSStub(connection, self._adapter)
+                print(f"Corriendo con hilos: {thread.getName()}")
+                thread.start()
+
 
         except KeyboardInterrupt:
             connection.close()

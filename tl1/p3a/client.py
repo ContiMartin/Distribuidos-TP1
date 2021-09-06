@@ -18,3 +18,13 @@ class Client:
 
     def listar_archivos(self, path):
         return self.adapter.list_files(path)
+
+    # Agregados
+    def abrir_archivo(self, path):
+        return self.adapter.open_file(path)
+
+    def leer_archivo(self, path, offset, cant_bytes):
+        return self.adapter.read_file(path, offset, cant_bytes)
+
+    def cerrar_archivo(self, path):
+        return self.adapter.close_file(path)

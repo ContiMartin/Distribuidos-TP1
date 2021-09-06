@@ -33,3 +33,22 @@ class Stub:
             response = self._stub.ListFiles(path)
             return response.values
         return None
+
+    # Agregados
+    def open_file(self, path):
+        path = Path(value=path)
+        response = self._stub.OpenFile(path)
+        return response.value
+
+    def read_file(self, path):
+        
+        path = Path(value=path)
+        response = self._stub.ReadFile(path)
+        return response.value
+
+    def close_file(self, path):
+        path = Path(value=path)
+        
+        response = self._stub.CloseFile(path)
+        
+        return response.value

@@ -25,6 +25,23 @@ class StubFSServicer(FSServicer):
             print('ERRR En server list files ', e)
         return response
 
+    def OpenFile(self, request, context):
+        response = file_system_pb2.Boolean()
+        can_open = self._adapter.open_file(request.value)
+        response.value = can_open
+        return response
+
+    def ReadFile(self, request, context):
+        response = file_system_pb2.File()
+        return response
+
+    def CloseFile(self, request, context):
+        response = file_system_pb2.Boolean()
+        can_open = self._adapter.close_file(request.value)
+        response.value = can_open
+        return response
+
+
 class Stub:
 
     def __init__(self, adapter, port='50051'):

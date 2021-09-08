@@ -3,7 +3,7 @@ from server import Server
 from p3b import ServerStub
 
 def main():
-    stub = ServerStub(FS(), '50051')
+    stub = ServerStub(FS, '50051')
     servidor = Server(stub)
     servidor.inicializar()
 

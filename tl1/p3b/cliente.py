@@ -105,10 +105,10 @@ def main():
                 
                 operation_result = leer_archivo(cliente, path)
                 
-                if operation_result[0]:
-                    print("Copia exitosa!")
-                else:
-                    print("Archivo no existe!")
+                #if operation_result[0]:
+                #    print("Copia exitosa!")
+                #else:
+                #    print("Archivo no existe!")
             if camino == "V":
                 path = menu()
                 print(f"Ruta ingresada: {path}")

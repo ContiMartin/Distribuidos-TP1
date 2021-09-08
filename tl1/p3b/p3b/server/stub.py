@@ -1,9 +1,9 @@
 import socket
-from p3b.structures import (Path)
+#from p3b.structures import (Path)
 import pickle
 
 # Constante para el tamaño del buffer
-cant_buff = 1024
+# cant_buff = 1024
 
 class FSStub:
 
@@ -13,24 +13,65 @@ class FSStub:
         self._process_request()
 
     def _process_request(self):
-        data = self._channel.recv(cant_buff)
-        if data:
-            dataPickle = pickle.loads(data)
-            if dataPickle is not None:
-                if dataPickle['comando'] == 1:
-                    path_files = self._adapter.list_files(dataPickle['value'])
-                    request = { 'value': path_files}
-                    requestPickle= pickle.dumps(request)
-                    self._channel.send(requestPickle)
+        
+        while True:    
+            data = self._channel.recv(4096)
+            
+            if data:
+                
+                payload = pickle.loads(data)
+                
+                camino = payload.get("comando", -1)
 
-                elif dataPickle['comando'] == 2:
-                    read_file = self._adapter.read_file(dataPickle["path"])
-                    request = { 'value': read_file}
-                    requestPickle = pickle.dumps(request)
-                    self._channel.sendall(requestPickle)
-                return 0
-        else:
-            return 1
+
+                if camino is not None:
+                    
+                    #if dataPickle['comando'] == 1:
+                    if camino == "1":
+
+                        #path_files = self._adapter.list_files(dataPickle['value'])
+                        
+                        #path_files = self._adapter.list_files(path)
+
+                        #request = { 'value': path_files}
+                        #requestPickle = pickle.dumps(request)
+                        #self._channel.send(requestPickle)
+
+                        path = payload.get("path")
+                        path_files = self._adapter.list_files(path)
+                        response = {"paths": path_files}
+                        response_serialized = pickle.dumps(response)
+                        self._channel.sendall(response_serialized)
+
+                    #elif dataPickle['comando'] == 2:
+                    elif camino == "2":
+                        #read_file = self._adapter.read_file(dataPickle["path"])
+                        path = payload.get("path")
+                        open = self._adapter.open_file(path)
+                        response = {"open": open}
+                        response_serialized = pickle.dumps(response)
+                        self._channel.sendall(response_serialized)
+                            
+                    #elif dataPickle['comando'] == 3:
+                    elif camino == "3":    
+                        path = payload.get("path")
+                        offset = payload.get("offset")
+                        cant_bytes = payload.get("cant_bytes")
+                        data_file = self._adapter.read_file(path, offset, cant_bytes)
+                        response = {"data_file": data_file}
+                        response_serialized = pickle.dumps(response)
+                        self._channel.sendall(response_serialized)
+
+                    #elif dataPickle['comando'] == 3:
+                    elif camino == "4":
+                        path = payload.get("path")
+                        close = self._adapter.close_file(path)
+                        response = {"close": close}
+                        response_serialized = pickle.dumps(response)
+                        self._channel.sendall(response_serialized)
+                 
+            else:
+                return 1
 
 class Stub:
 
@@ -50,7 +91,6 @@ class Stub:
         try:
             while True:
                 connection, client_address = self.server.accept()
-                from_client = ''
                 self._stub = FSStub(connection, self._adapter)
 
         except KeyboardInterrupt:

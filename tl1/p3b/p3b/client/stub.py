@@ -60,6 +60,17 @@ class FSStub:
 
         return data_Deserealized.get("open")
 
+    
+    
+    
+    def closeFile(self, path):
+        payload = {"path": path, "comando": 4}
+        payload_serialized = pickle.dumps(payload)
+        self._channel.sendall(payload_serialized)
+        data = self._channel.recv(4096)
+        data_deserialized = pickle.loads(data)
+        return data_deserialized.get("close")
+
 class Stub:
 
     def __init__(self, host='0.0.0.0', port='8090'):

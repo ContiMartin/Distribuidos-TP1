@@ -62,8 +62,8 @@ class FSStub:
 
 class Stub:
 
-    def __init__(self, host='0.0.0.0', port=8090):
-        self._appliance = (host, port)
+    def __init__(self, host='0.0.0.0', port='8090'):
+        self._appliance = (host, int(port))
         self._channel = None
         self._stub = None
 

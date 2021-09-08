@@ -9,6 +9,8 @@ from p3b import ClientStub
 
 from datetime import datetime
 
+TOPE = 2048
+
 # Obtiene la extencion del archivo, lo que este despues de un punto.
 def Obtener_extension_de_archivo(path):
     extension = path.split(".").pop()
@@ -33,6 +35,23 @@ def leer_archivo(cliente, path):
         # y lo que hacemos es que lo almacenamos en file
         file = open(file_name, "wb")
         
+
+
+        while True:
+            bytes_leidos = cliente.leer_archivo(
+                path,
+                offset,
+                TOPE,
+            )
+            offset += TOPE
+            file.write(bytes_leidos)
+            if len(bytes_leidos) == 0:
+                break
+
+
+
+
+
         print("Copiando el archivo...")
         file.close()
         cliente.cerrar_archivo(path)
@@ -46,7 +65,7 @@ def listar_archivos(path, cliente):
     
     # Iterar por toda la lista y muestra archivo por archivo.
     for archivo in archivos:
-        print(f"{archivo}")
+        print(f"-- {archivo}")
     return True
 
 
@@ -86,7 +105,7 @@ def main():
                 
                 operation_result = leer_archivo(cliente, path)
                 
-                if operation_result:
+                if operation_result[0]:
                     print("Copia exitosa!")
                 else:
                     print("Archivo no existe!")

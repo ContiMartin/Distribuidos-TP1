@@ -1,5 +1,5 @@
 import socket
-from structures import Path
+from p3b.structures import (Path)
 import pickle
 
 # Constante para el tamaño del buffer
@@ -17,16 +17,16 @@ class FSStub:
         if data:
             dataPickle = pickle.loads(data)
             if dataPickle is not None:
-                if dataPickle['operacion'] == 1:
+                if dataPickle['comando'] == 1:
                     path_files = self._adapter.list_files(dataPickle['value'])
                     request = { 'value': path_files}
                     requestPickle= pickle.dumps(request)
                     self._channel.send(requestPickle)
 
-                elif dataPickle['operacion'] == 2:
-                    read_file = self._adapter.read_file(dataPickle)
+                elif dataPickle['comando'] == 2:
+                    read_file = self._adapter.read_file(dataPickle["path"])
                     request = { 'value': read_file}
-                    requestPickle= pickle.dumps(request)
+                    requestPickle = pickle.dumps(request)
                     self._channel.sendall(requestPickle)
                 return 0
         else:
@@ -35,21 +35,21 @@ class FSStub:
 class Stub:
 
     def __init__(self, adapter, port='8090'):
-        self._port = port
+        self._port = int(port)
         self._adapter = adapter
         self.server = None
         self._stub = None
 
     def _setup(self):
         self.server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.server.bind(('0.0.0.0', self.port))        
+        self.server.bind(('0.0.0.0', self._port))        
 
     def run(self):
         self._setup()
         self.server.listen()
         try:
             while True:
-                connection, client_address = server.accept()
+                connection, client_address = self.server.accept()
                 from_client = ''
                 self._stub = FSStub(connection, self._adapter)
 

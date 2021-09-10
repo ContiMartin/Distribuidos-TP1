@@ -1,15 +1,10 @@
 from client import Client
-
-
-# Para el p 3a
-#from p3a import ClientStub
-
-# Para el p 3b
 from p3b import ClientStub
 
-from datetime import datetime
 
-TOPE = 2048
+import sys
+
+from datetime import datetime
 
 # Obtiene la extencion del archivo, lo que este despues de un punto.
 def Obtener_extension_de_archivo(path):
@@ -27,31 +22,17 @@ def leer_archivo(cliente, path):
         
         today = datetime.now()
         
+        print(". Ingrese nombre de archivo copiado nuevo..")
+        path_de_archivo = input()
+
         # https://rico-schmidt.name/pymotw-3/datetime/index.html
-        file_name = f"{today.strftime('%d-%m-%Y_%H:%M:%S')}.{extension}"
+        file_name = f"{path_de_archivo}.{extension}"
         
         # Open es una funcion de python para abrir archivos
         # necesita la ruta y los permisos
         # y lo que hacemos es que lo almacenamos en file
         file = open(file_name, "wb")
         
-
-        offset = 0
-        while True:
-            bytes_leidos = cliente.leer_archivo(
-                path,
-                offset,
-                TOPE,
-            )
-            offset += TOPE
-            file.write(bytes_leidos)
-            if len(bytes_leidos) == 0:
-                break
-
-
-
-
-
         print("Copiando el archivo...")
         file.close()
         cliente.cerrar_archivo(path)
@@ -65,7 +46,7 @@ def listar_archivos(path, cliente):
     
     # Iterar por toda la lista y muestra archivo por archivo.
     for archivo in archivos:
-        print(f"-- {archivo}")
+        print(f"{archivo}")
     return True
 
 
@@ -105,7 +86,8 @@ def main():
                 
                 operation_result = leer_archivo(cliente, path)
                 
-                #if operation_result[0]:
+
+                #if operation_result:
                 #    print("Copia exitosa!")
                 #else:
                 #    print("Archivo no existe!")

@@ -15,7 +15,7 @@ class FS:
     def open_file(self, path):
         try:
             if path not in self._file_manager:
-                _file = open(path, 'r')
+                _file = open(path, 'rb')
                 self._file_manager[path] = _file
             return True
         except Exception as e:
@@ -32,13 +32,16 @@ class FS:
             print('ERROR!!! ', e)
             return False
 
-    def read_file(self, path):
+    def read_file(self, path, offset, cant_bytes):
         try:
-            if self.open_file(path):
-                if path in self._file_manager:
-                    data = self._file_manager[path].read()
-                self.close_file(path)
-            return data
+            if path not in self._file_manager:
+                _file = open(path, "rb")
+                self._file_manager[path] = _file
+            else:
+                _file = self._file_manager[path]
+            _file.seek(offset)
+            bytes_leidos = _file.read(cant_bytes)
+            return bytes_leidos
         except Exception as e:
-            print('ERROR!!! ', e)
+            print("ERROR en Read File!!! ", e)
             return None

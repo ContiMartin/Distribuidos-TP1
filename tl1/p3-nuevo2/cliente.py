@@ -1,10 +1,9 @@
 from client import Client
 from p3b import ClientStub
 
+#from datetime import datetime
 
-import sys
-
-from datetime import datetime
+CANT_BYTES = 100
 
 # Obtiene la extencion del archivo, lo que este despues de un punto.
 def Obtener_extension_de_archivo(path):
@@ -20,8 +19,9 @@ def leer_archivo(cliente, path):
         
         extension = Obtener_extension_de_archivo(path)
         
-        today = datetime.now()
-        
+        #today = datetime.now()
+        offset = 0
+
         print(". Ingrese nombre de archivo copiado nuevo..")
         path_de_archivo = input()
 
@@ -34,6 +34,29 @@ def leer_archivo(cliente, path):
         file = open(file_name, "wb")
         
         print("Copiando el archivo...")
+        
+        
+        while True:
+            bytes_leidos = cliente.leer_archivo(
+                path,
+                offset,
+                CANT_BYTES,
+            )
+            offset += CANT_BYTES
+            
+            print("antes de escribir")
+
+            file.write(bytes_leidos)
+
+            print("despues de escribir")
+
+
+            if len(bytes_leidos) == 0:
+                break
+        
+        
+        
+        
         file.close()
         cliente.cerrar_archivo(path)
         return True
@@ -43,7 +66,9 @@ def leer_archivo(cliente, path):
 
 def listar_archivos(path, cliente):
     archivos = cliente.listar_archivos(path)
-    
+    if len(archivos) == 0:
+        return False
+    #print(f"Se encontraron {len(archivos)} archivos:")
     # Iterar por toda la lista y muestra archivo por archivo.
     for archivo in archivos:
         print(f"{archivo}")
@@ -83,31 +108,28 @@ def main():
             if camino == "L":
                 path = menu()
                 print(f"Ruta ingresada: {path}")
-                
                 operation_result = leer_archivo(cliente, path)
-                
+                if operation_result:
+                    print("Descarga exitosa!")
+                else:
+                    print("No se encontró el archivo, vuelva a intentar")
 
-                #if operation_result:
-                #    print("Copia exitosa!")
-                #else:
-                #    print("Archivo no existe!")
             if camino == "V":
                 path = menu()
                 print(f"Ruta ingresada: {path}")
-                operation_result = listar_archivos(path, cliente)
-                
+                operation_result = listar_archivos(path, cliente)              
                 if not operation_result:
                     print(f"Directorio vacio. {path}")
-            elif camino == "S":
-                
+
+            elif camino == "S": 
                 # Desconecta y saluda el cliente.
                 print("Saliendo")
                 cliente.desconectar()
                 print("Cliente Desconectado.")
-
                 # Talvez esta de mas
                 salir = True
                 break
+            
             else:
                 print("Reimprimir MENU!")
         except ValueError:

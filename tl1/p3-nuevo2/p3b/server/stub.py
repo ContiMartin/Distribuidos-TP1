@@ -28,24 +28,58 @@ class FSStub:
         #    for _path in path_files:
         #        self._channel.sendall(_path)
 
-            data = self._channel.recv(cant_buff)
-            if data:
-                dataPickle = pickle.loads(data)
-                if dataPickle is not None:
-                    if dataPickle['operacion'] == 1:
-                        path_files = self._adapter.list_files(dataPickle['value'])
-                        request = { 'value': path_files}
-                        requestPickle= pickle.dumps(request)
-                        self._channel.send(requestPickle)
+        #    data = self._channel.recv(cant_buff)
+        #    if data:
+        #        dataPickle = pickle.loads(data)
+        #        if dataPickle is not None:
+        #            if dataPickle['operacion'] == 1:
+        #                path_files = self._adapter.list_files(dataPickle['value'])
+        #                request = { 'value': path_files}
+        #                requestPickle= pickle.dumps(request)
+        #                self._channel.send(requestPickle)
 
-                    elif dataPickle['operacion'] == 2:
-                        read_file = self._adapter.read_file(dataPickle)
-                        request = { 'value': read_file}
-                        requestPickle= pickle.dumps(request)
-                        self._channel.sendall(requestPickle)
-                    return 0
-            else:
-                return 1
+#                    elif dataPickle['operacion'] == 2:
+#                        read_file = self._adapter.read_file(dataPickle)
+#                        request = { 'value': read_file}
+#                        requestPickle= pickle.dumps(request)
+ #                       self._channel.sendall(requestPickle)
+  #                  return 0
+   #         else:
+    #            return 1
+
+        while True:
+            data = self._channel.recv(4096)
+            if not data:
+                break
+
+            payload = pickle.loads(data)
+            comando = payload.get("operacion", -1)
+            if comando == 1:
+                path = payload.get("path")
+                path_files = self._adapter.list_files(path)
+                response = {"paths": path_files}
+                response_serialized = pickle.dumps(response)
+                self._channel.sendall(response_serialized)
+            elif comando == 2:
+                path = payload.get("path")
+                open = self._adapter.open_file(path)
+                response = {"open": open}
+                response_serialized = pickle.dumps(response)
+                self._channel.sendall(response_serialized)
+            elif comando == 3:
+                path = payload.get("path")
+                offset = payload.get("offset")
+                cant_bytes = payload.get("cant_bytes")
+                data_file = self._adapter.read_file(path, offset, cant_bytes)
+                response = {"data_file": data_file}
+                response_serialized = pickle.dumps(response)
+                self._channel.sendall(response_serialized)
+            elif comando == 4:
+                path = payload.get("path")
+                close = self._adapter.close_file(path)
+                response = {"close": close}
+                response_serialized = pickle.dumps(response)
+                self._channel.sendall(response_serialized)
 
 
 class Stub:

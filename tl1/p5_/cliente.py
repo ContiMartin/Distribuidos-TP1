@@ -1,9 +1,9 @@
 from client import Client
 from p3b import ClientStub
 
-#from datetime import datetime
+from datetime import datetime
 
-CANT_BYTES = 100
+CANT_BYTES = 2000
 
 # Obtiene la extencion del archivo, lo que este despues de un punto.
 def Obtener_extension_de_archivo(path):
@@ -13,9 +13,9 @@ def Obtener_extension_de_archivo(path):
 
 def leer_archivo(cliente, path):
 
-    can_open_file = cliente.abrir_archivo(path)
+    armado_de_archivo = cliente.abrir_archivo(path)
 
-    if can_open_file:
+    if armado_de_archivo:
         
         extension = Obtener_extension_de_archivo(path)
         
@@ -32,8 +32,8 @@ def leer_archivo(cliente, path):
         # necesita la ruta y los permisos
         # y lo que hacemos es que lo almacenamos en file
         file = open(file_name, "wb")
-        
-        print("Copiando el archivo...")
+        print(" ")
+        print(". Iniciando copia del archivo...")
         
         
         while True:
@@ -43,19 +43,11 @@ def leer_archivo(cliente, path):
                 CANT_BYTES,
             )
             offset += CANT_BYTES
-            
-            print("antes de escribir")
-
             file.write(bytes_leidos)
-
-            print("despues de escribir")
-
+            print('Copiado..', round(offset/(1024*1024),2),'MB')
 
             if len(bytes_leidos) == 0:
                 break
-        
-        
-        
         
         file.close()
         cliente.cerrar_archivo(path)
@@ -68,7 +60,6 @@ def listar_archivos(path, cliente):
     archivos = cliente.listar_archivos(path)
     if len(archivos) == 0:
         return False
-    #print(f"Se encontraron {len(archivos)} archivos:")
     # Iterar por toda la lista y muestra archivo por archivo.
     for archivo in archivos:
         print(f"{archivo}")
@@ -76,21 +67,24 @@ def listar_archivos(path, cliente):
 
 
 def menu():
+    print(" ")
     print(". Donde buscar el archivo?:..")
     path = input()
     return path
 
 
 def main():
-    # Este Main no cambia por ahora
     stub = ClientStub("localhost", "50051")
     cliente = Client(stub)
     cliente.conectar()
     
+    inicial = datetime.today()
+
     # Variable para poder salir del while
     salir = False
 
     while not salir:
+        print(" ")
         print(" - - - - - - - -0- - - - - - - -")
         print(" Menu - Sistemas Distribuidos 2021")
         print(" L - Leer y copiar Archivo")
@@ -100,29 +94,35 @@ def main():
         
         # Opcion ingresada por consola
         camino = input()
-
+ 
         try:
             
             # Segun la opcion entra en un camino o el otro
             camino = str(camino)
             if camino == "L":
                 path = menu()
+                print(" ")
                 print(f"Ruta ingresada: {path}")
                 operation_result = leer_archivo(cliente, path)
                 if operation_result:
+                    print(" ")
                     print("Descarga exitosa!")
                 else:
+                    print(" ")
                     print("No se encontró el archivo, vuelva a intentar")
 
             if camino == "V":
                 path = menu()
+                print(" ")
                 print(f"Ruta ingresada: {path}")
                 operation_result = listar_archivos(path, cliente)              
                 if not operation_result:
+                    print(" ")
                     print(f"Directorio vacio. {path}")
 
             elif camino == "S": 
                 # Desconecta y saluda el cliente.
+                print(" ")
                 print("Saliendo")
                 cliente.desconectar()
                 print("Cliente Desconectado.")
@@ -131,13 +131,19 @@ def main():
                 break
             
             else:
+                print(" ")
                 print("Reimprimir MENU!")
         except ValueError:
+            print(" ")
             print("Opción Incorrectas")
         except KeyboardInterrupt:
             cliente.desconectar()
             salir = True
             break
+        
+        final = datetime.today()
+        print(" ")
+        print('Tiempo total: ', (final- inicial))
 
 if __name__ == '__main__':
     main()

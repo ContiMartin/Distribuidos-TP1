@@ -9,6 +9,7 @@ class FS:
         try:
             return os.listdir(path)
         except Exception as e:
+            print(' ')
             print('ERROR!!! ', e)
             return None
 
@@ -19,6 +20,7 @@ class FS:
                 self._file_manager[path] = _file
             return True
         except Exception as e:
+            print(' ')
             print('ERROR!!! ', e)
             return False
 
@@ -29,6 +31,7 @@ class FS:
                 del self._file_manager[path]
             return True
         except Exception as e:
+            print(' ')
             print('ERROR!!! ', e)
             return False
 
@@ -43,5 +46,6 @@ class FS:
             bytes_leidos = _file.read(cant_bytes)
             return bytes_leidos
         except Exception as e:
+            print(' ')
             print("ERROR en Read File!!! ", e)
             return None

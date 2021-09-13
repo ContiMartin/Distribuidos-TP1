@@ -9,42 +9,71 @@ class FSStub:
         self._channel = canal
 
     def ListFiles(self, path): 
-        payload = {"path": path, "operacion": 1}
-        payload_serialized = pickle.dumps(payload)
-        self._channel.sendall(payload_serialized)
+        # armo el datos con path y el numero de operacion para el servidor 
+        datos = {"path": path, "operacion": 1}
+        
+        # Con pickle encapsulamos o serializamos lo datos
+        datos_serializados = pickle.dumps(datos)
+        
+        # hago la llamada con los datos serializados
+        self._channel.sendall(datos_serializados)
         data = self._channel.recv(4096)
+        
+        # Desearializo los datos y retorno
         data_deserialized = pickle.loads(data)
         return data_deserialized.get("paths")
 
 
     def openFile(self, path):
-        payload = {"path": path, "operacion": 2}
-        payload_serialized = pickle.dumps(payload)
-        self._channel.sendall(payload_serialized)
+        # armo el datos con path y el numero de operacion para el servidor
+        datos = {"path": path, "operacion": 2}
+        
+        # Con pickle encapsulamos o serializamos lo datos
+        datos_serializados = pickle.dumps(datos)
+
+        # hago la llamada con los datos serializados
+        self._channel.sendall(datos_serializados)
         data = self._channel.recv(4096)
+        
+        # Desearializo los datos y retorno
         data_deserialized = pickle.loads(data)
         return data_deserialized.get("open")
 
     def readFile(self, path, offset, cant_bytes):
-        payload = {
+        # armo el datos con path, el numero de operacion para el servidor
+        # el offset y la cantidad de bytes
+        datos = {
             "path": path,
             "offset": offset,
             "cant_bytes": cant_bytes,
             "operacion": 3,
         }
-        payload_serialized = pickle.dumps(payload)
-        self._channel.sendall(payload_serialized)
+
+        # Con pickle encapsulamos o serializamos lo datos
+        datos_serializados = pickle.dumps(datos)
+        
+        # hago la llamada con los datos serializados
+        self._channel.sendall(datos_serializados)
         data = self._channel.recv(4096)
         data_deserialized = pickle.loads(data)
+
+        # Desearializo los datos y retorno
         return data_deserialized.get("data_file")
 
     def closeFile(self, path):
-        payload = {"path": path, "operacion": 4}
-        payload_serialized = pickle.dumps(payload)
-        self._channel.sendall(payload_serialized)
+        # armo el datos con path y el numero de operacion para el servidor
+        datos = {"path": path, "operacion": 4}
+
+        # Con pickle encapsulamos o serializamos lo datos
+        datos_serializados = pickle.dumps(datos)
+        
+        # hago la llamada con los datos serializados
+        self._channel.sendall(datos_serializados)
         data = self._channel.recv(4096)
-        data_deserialized = pickle.loads(data)
-        return data_deserialized.get("close")
+        
+        # Desearializo los datos y retorno
+        data_deserializados = pickle.loads(data)
+        return data_deserializados.get("close")
 
 class Stub:
 

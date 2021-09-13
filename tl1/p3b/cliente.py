@@ -1,15 +1,9 @@
 from client import Client
-
-
-# Para el p 3a
-#from p3a import ClientStub
-
-# Para el p 3b
 from p3b import ClientStub
 
 from datetime import datetime
 
-TOPE = 2048
+CANT_BYTES = 2000
 
 # Obtiene la extencion del archivo, lo que este despues de un punto.
 def Obtener_extension_de_archivo(path):
@@ -19,40 +13,42 @@ def Obtener_extension_de_archivo(path):
 
 def leer_archivo(cliente, path):
 
-    can_open_file = cliente.abrir_archivo(path)
+    armado_de_archivo = cliente.abrir_archivo(path)
 
-    if can_open_file:
+    if armado_de_archivo:
         
         extension = Obtener_extension_de_archivo(path)
         
-        today = datetime.now()
-        
+        #today = datetime.now()
+        offset = 0
+
+        print(". Ingrese nombre de archivo copiado nuevo..")
+        path_de_archivo = input()
+
         # https://rico-schmidt.name/pymotw-3/datetime/index.html
-        file_name = f"{today.strftime('%d-%m-%Y_%H:%M:%S')}.{extension}"
+        file_name = f"{path_de_archivo}.{extension}"
         
         # Open es una funcion de python para abrir archivos
         # necesita la ruta y los permisos
         # y lo que hacemos es que lo almacenamos en file
         file = open(file_name, "wb")
+        print(" ")
+        print(". Iniciando copia del archivo...")
         
-
-        offset = 0
+        
         while True:
             bytes_leidos = cliente.leer_archivo(
                 path,
                 offset,
-                TOPE,
+                CANT_BYTES,
             )
-            offset += TOPE
+            offset += CANT_BYTES
             file.write(bytes_leidos)
+            print('Copiado..', round(offset/(1024*1024),2),'MB')
+
             if len(bytes_leidos) == 0:
                 break
-
-
-
-
-
-        print("Copiando el archivo...")
+        
         file.close()
         cliente.cerrar_archivo(path)
         return True
@@ -62,29 +58,33 @@ def leer_archivo(cliente, path):
 
 def listar_archivos(path, cliente):
     archivos = cliente.listar_archivos(path)
-    
+    if len(archivos) == 0:
+        return False
     # Iterar por toda la lista y muestra archivo por archivo.
     for archivo in archivos:
-        print(f"-- {archivo}")
+        print(f"{archivo}")
     return True
 
 
 def menu():
+    print(" ")
     print(". Donde buscar el archivo?:..")
     path = input()
     return path
 
 
 def main():
-    # Este Main no cambia por ahora
     stub = ClientStub("localhost", "50051")
     cliente = Client(stub)
     cliente.conectar()
     
+    inicial = datetime.today()
+
     # Variable para poder salir del while
     salir = False
 
     while not salir:
+        print(" ")
         print(" - - - - - - - -0- - - - - - - -")
         print(" Menu - Sistemas Distribuidos 2021")
         print(" L - Leer y copiar Archivo")
@@ -94,46 +94,56 @@ def main():
         
         # Opcion ingresada por consola
         camino = input()
-
+ 
         try:
             
             # Segun la opcion entra en un camino o el otro
             camino = str(camino)
             if camino == "L":
                 path = menu()
+                print(" ")
                 print(f"Ruta ingresada: {path}")
-                
                 operation_result = leer_archivo(cliente, path)
-                
-                #if operation_result[0]:
-                #    print("Copia exitosa!")
-                #else:
-                #    print("Archivo no existe!")
+                if operation_result:
+                    print(" ")
+                    print("Descarga exitosa!")
+                else:
+                    print(" ")
+                    print("No se encontró el archivo, vuelva a intentar")
+
             if camino == "V":
                 path = menu()
+                print(" ")
                 print(f"Ruta ingresada: {path}")
-                operation_result = listar_archivos(path, cliente)
-                
+                operation_result = listar_archivos(path, cliente)              
                 if not operation_result:
+                    print(" ")
                     print(f"Directorio vacio. {path}")
-            elif camino == "S":
-                
+
+            elif camino == "S": 
                 # Desconecta y saluda el cliente.
+                print(" ")
                 print("Saliendo")
                 cliente.desconectar()
                 print("Cliente Desconectado.")
-
                 # Talvez esta de mas
                 salir = True
                 break
+            
             else:
+                print(" ")
                 print("Reimprimir MENU!")
         except ValueError:
+            print(" ")
             print("Opción Incorrectas")
         except KeyboardInterrupt:
             cliente.desconectar()
             salir = True
             break
+        
+        final = datetime.today()
+        print(" ")
+        print('Tiempo total: ', (final- inicial))
 
 if __name__ == '__main__':
     main()

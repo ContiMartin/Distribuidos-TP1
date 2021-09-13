@@ -1,3 +1,4 @@
+from p3b.client.stub import Stub
 from file_system import FS
 from server import Server
 from p3b import ServerStub

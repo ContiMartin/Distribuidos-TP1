@@ -9,16 +9,18 @@ class FS:
         try:
             return os.listdir(path)
         except Exception as e:
+            print(' ')
             print('ERROR!!! ', e)
             return None
 
     def open_file(self, path):
         try:
             if path not in self._file_manager:
-                _file = open(path, 'r')
+                _file = open(path, 'rb')
                 self._file_manager[path] = _file
             return True
         except Exception as e:
+            print(' ')
             print('ERROR!!! ', e)
             return False
 
@@ -29,16 +31,21 @@ class FS:
                 del self._file_manager[path]
             return True
         except Exception as e:
+            print(' ')
             print('ERROR!!! ', e)
             return False
 
-    def read_file(self, path):
+    def read_file(self, path, offset, cant_bytes):
         try:
-            if self.open_file(path):
-                if path in self._file_manager:
-                    data = self._file_manager[path].read()
-                self.close_file(path)
-            return data
+            if path not in self._file_manager:
+                _file = open(path, "rb")
+                self._file_manager[path] = _file
+            else:
+                _file = self._file_manager[path]
+            _file.seek(offset)
+            bytes_leidos = _file.read(cant_bytes)
+            return bytes_leidos
         except Exception as e:
-            print('ERROR!!! ', e)
+            print(' ')
+            print("ERROR en Read File!!! ", e)
             return None

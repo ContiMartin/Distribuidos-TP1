@@ -19,7 +19,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\x11\x66ile_system.proto\"\x15\n\x04Path\x12\r\n\x05value\x18\x01 \x01(\t\"\x1b\n\tPathFiles\x12\x0e\n\x06values\x18\x02 \x03(\t\"\x18\n\x07\x42oolean\x12\r\n\x05value\x18\x01 \x01(\x08\"\x15\n\x04\x46ile\x12\r\n\x05value\x18\x01 \x01(\x0c\x32\x81\x01\n\x02\x46S\x12 \n\tListFiles\x12\x05.Path\x1a\n.PathFiles\"\x00\x12\x1d\n\x08OpenFile\x12\x05.Path\x1a\x08.Boolean\"\x00\x12\x1a\n\x08ReadFile\x12\x05.Path\x1a\x05.File\"\x00\x12\x1e\n\tCloseFile\x12\x05.Path\x1a\x08.Boolean\"\x00\x62\x06proto3'
+  serialized_pb=b'\n\x11\x66ile_system.proto\"\x15\n\x04Path\x12\r\n\x05value\x18\x01 \x01(\t\"\x1b\n\tPathFiles\x12\x0e\n\x06values\x18\x02 \x03(\t\"\x18\n\x07\x42oolean\x12\r\n\x05value\x18\x01 \x01(\x08\"\x15\n\x04\x46ile\x12\r\n\x05value\x18\x01 \x01(\x0c\"\x17\n\x06Offset\x12\r\n\x05value\x18\x01 \x01(\x05\"\x1a\n\tCantBytes\x12\r\n\x05value\x18\x01 \x01(\x05\"b\n\x12ReadFileParameters\x12\x13\n\x04path\x18\x01 \x01(\x0b\x32\x05.Path\x12\x17\n\x06offset\x18\x02 \x01(\x0b\x32\x07.Offset\x12\x1e\n\ncant_bytes\x18\x03 \x01(\x0b\x32\n.CantBytes2\x8f\x01\n\x02\x46S\x12 \n\tListFiles\x12\x05.Path\x1a\n.PathFiles\"\x00\x12\x1d\n\x08OpenFile\x12\x05.Path\x1a\x08.Boolean\"\x00\x12(\n\x08ReadFile\x12\x13.ReadFileParameters\x1a\x05.File\"\x00\x12\x1e\n\tCloseFile\x12\x05.Path\x1a\x08.Boolean\"\x00\x62\x06proto3'
 )
 
 
@@ -152,10 +152,126 @@ _FILE = _descriptor.Descriptor(
   serialized_end=120,
 )
 
+
+_OFFSET = _descriptor.Descriptor(
+  name='Offset',
+  full_name='Offset',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='value', full_name='Offset.value', index=0,
+      number=1, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=122,
+  serialized_end=145,
+)
+
+
+_CANTBYTES = _descriptor.Descriptor(
+  name='CantBytes',
+  full_name='CantBytes',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='value', full_name='CantBytes.value', index=0,
+      number=1, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=147,
+  serialized_end=173,
+)
+
+
+_READFILEPARAMETERS = _descriptor.Descriptor(
+  name='ReadFileParameters',
+  full_name='ReadFileParameters',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='path', full_name='ReadFileParameters.path', index=0,
+      number=1, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='offset', full_name='ReadFileParameters.offset', index=1,
+      number=2, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='cant_bytes', full_name='ReadFileParameters.cant_bytes', index=2,
+      number=3, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=175,
+  serialized_end=273,
+)
+
+_READFILEPARAMETERS.fields_by_name['path'].message_type = _PATH
+_READFILEPARAMETERS.fields_by_name['offset'].message_type = _OFFSET
+_READFILEPARAMETERS.fields_by_name['cant_bytes'].message_type = _CANTBYTES
 DESCRIPTOR.message_types_by_name['Path'] = _PATH
 DESCRIPTOR.message_types_by_name['PathFiles'] = _PATHFILES
 DESCRIPTOR.message_types_by_name['Boolean'] = _BOOLEAN
 DESCRIPTOR.message_types_by_name['File'] = _FILE
+DESCRIPTOR.message_types_by_name['Offset'] = _OFFSET
+DESCRIPTOR.message_types_by_name['CantBytes'] = _CANTBYTES
+DESCRIPTOR.message_types_by_name['ReadFileParameters'] = _READFILEPARAMETERS
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
 Path = _reflection.GeneratedProtocolMessageType('Path', (_message.Message,), {
@@ -186,6 +302,27 @@ File = _reflection.GeneratedProtocolMessageType('File', (_message.Message,), {
   })
 _sym_db.RegisterMessage(File)
 
+Offset = _reflection.GeneratedProtocolMessageType('Offset', (_message.Message,), {
+  'DESCRIPTOR' : _OFFSET,
+  '__module__' : 'file_system_pb2'
+  # @@protoc_insertion_point(class_scope:Offset)
+  })
+_sym_db.RegisterMessage(Offset)
+
+CantBytes = _reflection.GeneratedProtocolMessageType('CantBytes', (_message.Message,), {
+  'DESCRIPTOR' : _CANTBYTES,
+  '__module__' : 'file_system_pb2'
+  # @@protoc_insertion_point(class_scope:CantBytes)
+  })
+_sym_db.RegisterMessage(CantBytes)
+
+ReadFileParameters = _reflection.GeneratedProtocolMessageType('ReadFileParameters', (_message.Message,), {
+  'DESCRIPTOR' : _READFILEPARAMETERS,
+  '__module__' : 'file_system_pb2'
+  # @@protoc_insertion_point(class_scope:ReadFileParameters)
+  })
+_sym_db.RegisterMessage(ReadFileParameters)
+
 
 
 _FS = _descriptor.ServiceDescriptor(
@@ -195,8 +332,8 @@ _FS = _descriptor.ServiceDescriptor(
   index=0,
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_start=123,
-  serialized_end=252,
+  serialized_start=276,
+  serialized_end=419,
   methods=[
   _descriptor.MethodDescriptor(
     name='ListFiles',
@@ -223,7 +360,7 @@ _FS = _descriptor.ServiceDescriptor(
     full_name='FS.ReadFile',
     index=2,
     containing_service=None,
-    input_type=_PATH,
+    input_type=_READFILEPARAMETERS,
     output_type=_FILE,
     serialized_options=None,
     create_key=_descriptor._internal_create_key,

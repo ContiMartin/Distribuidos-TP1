@@ -1,5 +1,5 @@
 from client import Client
-from p5 import ClientStub
+from p7 import ClientStub
 
 from datetime import datetime
 

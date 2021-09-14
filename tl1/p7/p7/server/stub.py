@@ -5,6 +5,8 @@ import pickle
 # Libreria para hilos
 import threading
 
+NUM_HILOS = 2
+
 cant_buff = 1024
 
 class FSStub(threading.Thread):
@@ -18,16 +20,7 @@ class FSStub(threading.Thread):
         
     def run(self):
         while True:
-
-
-
-
-
-
-
             data = self._channel.recv(4096)
-            
-
             datos = pickle.loads(data)
             comando = datos.get("operacion", -1)
             if comando == 1:
@@ -96,55 +89,25 @@ class Stub:
         self.server.bind(('0.0.0.0', self._port))        
 
     def run(self):
+        print(" ")
+        print(" - - - - - - - -0- - - - - - - -")
+        print(" Menu del servidor - Sistemas Distribuidos 2021")
+        print(" Ingrese cantidad de hilos a crear")
+        print(" ")
+        numero = input()
         self._setup()
-        self.server.listen()
+        for num_hilo in range (int(numero)):
+                hilo = threading.Thread(name='Hilo%s' %num_hilo, target = self.server.listen())    
+        hilo.start()
+        print(hilo)
         try:
             while True:
-                # Variable para poder salir del while
-                print(" ")
-                print(" - - - - - - - -0- - - - - - - -")
-                print(" Menu del servidor - Sistemas Distribuidos 2021")
-                print(" Ingrese cantidad de hilos a crear")
-                print(" ")
-                
-                # Opcion ingresada por consola
-                nuemro = input()
-                            
-                
-                try:
-            
-                    # Segun la opcion entra en un camino o el otro
-                    camino = int(camino)
-                    if camino == "":
-                    print(" ")
-                    print(f"Ruta ingresada: {path}")
-                
-                
-                
-                elif camino == "0": 
-                    # Desconecta y saluda el cliente.
-                    print(" ")
-                    print("Saliendo")
-                    
-                    
-                    break
-                
-                
-                
-                
-                
                 connection, client_address = self.server.accept()
                 print(" ")
                 print(" Cliente: ", str(client_address))
-                
-                # Como era antes
-                # self._stub = FSStub(connection, self._adapter)
-                # Como queda con hilos
                 thread = FSStub(connection, self._adapter)
                 print(" Atendido por el Hilo:", thread.getName())
-                
                 thread.start()
-
         except KeyboardInterrupt:
             connection.close()
             self.server.stop(0)

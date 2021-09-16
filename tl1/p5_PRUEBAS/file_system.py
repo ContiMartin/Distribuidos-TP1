@@ -1,4 +1,9 @@
 import os
+import dill
+from collections import defaultdict
+
+file_user_manager = defaultdict(lambda:{})
+
 
 class FS:
 
@@ -35,10 +40,18 @@ class FS:
             print('ERROR!!! ', e)
             return False
 
-    def read_file(self, path, offset, cant_bytes):
+    def read_file(cliente, self, path, offset, cant_bytes):
         try:
-            if path not in self._file_manager:
-                _file = open(path, "rb")
+
+            if cliente not in file_user_manager:
+                file_user_manager[cliente][path] = None
+            if path not in file_user_manager[cliente]:
+                file_user_manager[cliente][path] = None
+            if file_user_manager[cliente][path] is None:
+                file_user_manager[cliente][path] = open(file, 'rb')
+            
+            #if path not in self._file_manager:
+            #    _file = open(path, "rb")
                 self._file_manager[path] = _file
             else:
                 _file = self._file_manager[path]
